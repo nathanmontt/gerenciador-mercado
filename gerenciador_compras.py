@@ -1,5 +1,14 @@
+import datetime
 from time import sleep
 from reportlab.pdfgen import canvas
+
+# PDF CONFIG
+pdf_file_name = "lista_compras.pdf"
+doc_file_title_name = "LISTA DE COMPRAS"
+
+complete_date = f"{datetime.datetime.now().day}/{datetime.datetime.now().month}/{datetime.datetime.now().year}"
+
+doc_file_subtitle_name = f"Lista de compras do dia {complete_date}"
 
 shopping_cart = []
 print("BEM-VINDO(A) AO NOSSO MERCADO!")
@@ -70,15 +79,23 @@ while True:
                     cont+=1
                 print("\n")
 
-        case "5":
-            c = canvas.Canvas("lista_compras.pdf")
-            c.drawString(100, 750, "LISTA DE COMPRAS")
-            altura = 770
-            for cont, product in enumerate(shopping_cart, start=1):
-                c.drawString(100, altura, f"{cont} - {product}")
-                altura -= 20
-            c.save()
-            print("PDF criado: lista_compras.pdf")
+        case "5": # download pdf
+            pdf = canvas.Canvas(pdf_file_name)
+
+            # title
+            pdf.setTitle(doc_file_title_name)
+            pdf.setFontSize(18)
+            pdf.drawCentredString(300, 770, doc_file_title_name)
+
+            # subtitle
+            pdf.setFontSize(12)
+            pdf.drawCentredString(300, 740, doc_file_subtitle_name)
+            # altura = 770
+            # for cont, product in enumerate(shopping_cart, start=1):
+            #     pdf.drawString(100, altura, f"{cont} - {product}")
+            #     altura -= 20
+            pdf.save()
+            print(f"PDF criado: {pdf_file_name}")
 
         case "6": # sair
             print("Obrigado por usar os serviços do NOSSO MERCADO! ATÉ LOGO!")
