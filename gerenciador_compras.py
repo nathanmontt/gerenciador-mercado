@@ -1,22 +1,11 @@
 from time import sleep
+from reportlab.pdfgen import canvas
 
-'''
-1. Gerenciador de Lista de Compras (Foco em Listas)
-Um programa de terminal onde o usuário pode adicionar, remover e visualizar itens que precisa comprar.
-Como funciona:
-- Crie um menu simples em um loop while (Ex: 1-Adicionar, 2-Remover, 3-Ver Lista, 4-Sair).
-
-O que você vai praticar:
-- Manipulação de listas (.append(), .remove(), .pop()), loops for para imprimir os itens enumerados e condicionais (if/else) para menus.
-
-Toque para o GitHub:
-- Adicione uma funcionalidade de "limpar a lista inteira" e trate o erro caso o usuário tente remover um item que não existe na lista.
-'''
 shopping_cart = []
 print("BEM-VINDO(A) AO NOSSO MERCADO!")
 
 while True:
-    menu_options = input("Digite uma opção para seu carrinho de compras:\n1 - Adicionar\n2 - Remover um item\n3 - Limpar lista de compras\n4 - Ver Lista\n5 - Sair\n: ").strip()
+    menu_options = input("Digite uma opção para seu carrinho de compras:\n1 - Adicionar\n2 - Remover um item\n3 - Limpar lista de compras\n4 - Ver Lista\n5 - Download (.pdf)\n6 - Sair\n: ").strip()
     match menu_options:
         case "1": # adicionar itens
             while True:
@@ -81,7 +70,17 @@ while True:
                     cont+=1
                 print("\n")
 
-        case "5": # sair
+        case "5":
+            c = canvas.Canvas("lista_compras.pdf")
+            c.drawString(100, 750, "LISTA DE COMPRAS")
+            altura = 770
+            for cont, product in enumerate(shopping_cart, start=1):
+                c.drawString(100, altura, f"{cont} - {product}")
+                altura -= 20
+            c.save()
+            print("PDF criado: lista_compras.pdf")
+
+        case "6": # sair
             print("Obrigado por usar os serviços do NOSSO MERCADO! ATÉ LOGO!")
             break
         
