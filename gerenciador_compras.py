@@ -1,14 +1,15 @@
 import datetime
-from time import sleep
-from reportlab.pdfgen import canvas
+from time                       import sleep
+from reportlab.pdfgen           import canvas
+from reportlab.lib.pagesizes    import A4
+from reportlab.lib              import colors
+from reportlab.platypus         import Table, TableStyle
 
 # PDF CONFIG
 pdf_file_name = "lista_compras.pdf"
-doc_file_title_name = "LISTA DE COMPRAS"
-
 complete_date = f"{datetime.datetime.now().day}/{datetime.datetime.now().month}/{datetime.datetime.now().year}"
-
-doc_file_subtitle_name = f"Lista de compras do dia {complete_date}"
+doc_file_subtitle = f"Lista de compras do dia {complete_date}"
+doc_file_archive_name = "LISTA DE COMPRAS"
 
 shopping_cart = []
 print("BEM-VINDO(A) AO NOSSO MERCADO!")
@@ -34,7 +35,7 @@ while True:
                 for i in range(3):
                     sleep(.3)
                     print(".", end="")
-                print(f"\n{item_add} foi adicionado.")
+                print(f"\n{item_add} (x{quantity}) foi adicionado.")
 
         case "2": # remover um item específico
             if (shopping_cart == []):
@@ -80,22 +81,48 @@ while True:
                 print("\n")
 
         case "5": # download pdf
-            pdf = canvas.Canvas(pdf_file_name)
+            pdf = canvas.Canvas(pdf_file_name, pagesize=A4)
+            doc_file_name = input("Digite o nome do arquivo que desja salvar: ")
 
             # title
-            pdf.setTitle(doc_file_title_name)
+            pdf.setTitle(doc_file_name)
             pdf.setFontSize(18)
-            pdf.drawCentredString(300, 770, doc_file_title_name)
+            pdf.drawCentredString(300, 770, doc_file_archive_name)
 
             # subtitle
             pdf.setFontSize(12)
-            pdf.drawCentredString(300, 740, doc_file_subtitle_name)
-            # altura = 770
-            # for cont, product in enumerate(shopping_cart, start=1):
-            #     pdf.drawString(100, altura, f"{cont} - {product}")
-            #     altura -= 20
+            pdf.drawCentredString(300, 740, doc_file_subtitle)
+
+            # table
+            table_data = [["Nº", "Produto", "Quantidade"]]
+
+            for cont, product in enumerate(shopping_cart, start=1):
+                table_data.append([cont, product, ""])
+
+            main_table = Table(
+                table_data,
+                colWidths=[50, 300, 100]
+            )
+
+            main_table.setStyle(TableStyle([
+                ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.black),
+                ("GRID", (0, 0), (-1, -1), 1, colors.black),
+                ("ALIGN", (0, 0), (0, -1), "CENTER"),
+                ("ALIGN", (2, 0), (2, -1), "CENTER"),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ]))
+
+            table_width, table_height = main_table.wrapOn(pdf, 0, 0)
+            main_table.drawOn(pdf, 50, 700 - table_height)
+
+            print("Salvando o arquivo", end="")
+            for i in range(5):
+                sleep(.5)
+                print(".", end="")
+            
             pdf.save()
-            print(f"PDF criado: {pdf_file_name}")
+            print(f"\nPDF criado: {pdf_file_name}")
 
         case "6": # sair
             print("Obrigado por usar os serviços do NOSSO MERCADO! ATÉ LOGO!")
