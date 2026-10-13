@@ -20,22 +20,30 @@ while True:
         case "1": # adicionar itens
             while True:
                 item_add = input("Digite um produto ou 'sair' para voltar ao menu: ").strip()
-        
-                if item_add.lower() in ("sair", "cancelar"):
+                if item_add.lower() in ("sair", "cancelar", "s", "não"):
                     break
         
                 item_add = item_add.capitalize()
         
-                if (item_add in shopping_cart or len(item_add) <= 2 or any(caractere.isdigit() for caractere in item_add)):
+                item_repeated = False
+                for product in shopping_cart:
+                    if product[0] == item_add:
+                        item_repeated = True
+                        break
+
+                if (item_repeated or len(item_add) <= 2 or any(caractere.isdigit() for caractere in item_add)):
                     print("Item inválido ou repetido.")
                     continue
+
+                quantity = int(input("Quantidade: ").strip())
+                while quantity < 0: quantity = int(input("Erro. Repita para uma quantidade correta: ").strip())
         
-                shopping_cart.append(item_add)
+                shopping_cart.append([item_add, quantity])
                 print("Adicionando o produto", end="")
                 for i in range(3):
                     sleep(.3)
                     print(".", end="")
-                print(f"\n{item_add} (x{quantity}) foi adicionado.")
+                print(f"\n{item_add} (x{quantity}) adicionado com sucesso!")
 
         case "2": # remover um item específico
             if (shopping_cart == []):
@@ -43,12 +51,18 @@ while True:
 
             while True:
                 remove_cart_item = input("Digite o item que deseja remover ou 'sair' para voltar ao menu: ").strip()
-                if remove_cart_item.lower() in ("sair", "cancelar"):
+                if remove_cart_item.lower() in ("sair", "cancelar", "s", "não"):
                     break
                 remove_cart_item = remove_cart_item.capitalize()
                 
-                if remove_cart_item in shopping_cart:
-                    shopping_cart.remove(remove_cart_item)
+                item_found = False
+                for product in shopping_cart:
+                    if product[0] == remove_cart_item:
+                        shopping_cart.remove(product)
+                        item_found = True
+                        break
+
+                if item_found:
                     print("Removendo item", end="")
                     for i in range(3):
                         sleep(.3)
@@ -75,8 +89,8 @@ while True:
             if (shopping_cart == []):
                 print("Lista vazia.\nAdicione produtos para mostrá-los")
             else:
-                for products in shopping_cart:
-                    print(f"{cont} = {products}", end="\n")
+                for product in shopping_cart:
+                    print(f"{cont} = {product[0]} (x{product[1]})", end="\n")
                     cont+=1
                 print("\n")
 
@@ -97,7 +111,7 @@ while True:
             table_data = [["Nº", "Produto", "Quantidade"]]
 
             for cont, product in enumerate(shopping_cart, start=1):
-                table_data.append([cont, product, ""])
+                table_data.append([cont, product[0], product[1]])
 
             main_table = Table(
                 table_data,
