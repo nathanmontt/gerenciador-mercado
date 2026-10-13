@@ -14,7 +14,7 @@ O projeto prático foi criado para fixar conceitos fundamentais de Python, com f
 
 ## _Feats_ Futuras
 
-- [ ] Exportação da lista de compras em formato **PDF**.
+- [x] Exportação da lista de compras em formato **PDF**.
 - [ ] Adição do **quantitativo de produtos**.
 
 ## O que foi aprendido e praticado neste projeto
