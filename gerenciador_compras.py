@@ -35,8 +35,9 @@ while True:
                     print("Item inválido ou repetido.")
                     continue
 
-                quantity = int(input("Quantidade: ").strip())
-                while quantity < 0: quantity = int(input("Erro. Repita para uma quantidade correta: ").strip())
+                quantity = input("Quantidade: ").strip()
+                while any(digit.isalpha() for digit in quantity) or quantity[0] == "-":
+                    quantity = input("Erro. Repita para uma quantidade correta: ").strip()
         
                 shopping_cart.append([item_add, quantity])
                 print("Adicionando o produto", end="")
