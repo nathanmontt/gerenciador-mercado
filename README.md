@@ -27,7 +27,7 @@ O projeto prático foi criado para fixar conceitos fundamentais de Python, com f
 
 Para rodar o projeto, é necessário ter instalado **Python 3.10 ou uma versão superior** no seu computador.
 
-## 💻 Como clonar e executar para uso próprio
+## Como clonar e executar para uso próprio
 
 Se você quiser testar ou modificar este projeto na sua máquina, siga os passos abaixo:
 
