@@ -10,7 +10,7 @@ O projeto prático foi criado para fixar conceitos fundamentais de Python, com f
 - **Remover itens:** exclusão de itens específico da lista, informando caso o usuário tente deletar algo que não exista ou se a lista estiver vazia.
 - **Limpar lista:** esvazio do carrinho por completo com uma única ação.
 - **Visualizar:** amostragem de todos os itens da lista enumerados e organizados.
-- **UI de Terminal:** efeitos de carregamento utilizando a biblioteca `time`.
+- **UI de terminal:** efeitos de carregamento utilizando a biblioteca `time`.
 
 ## _Feats_ Futuras
 
