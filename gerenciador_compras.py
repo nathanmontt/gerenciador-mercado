@@ -5,6 +5,51 @@ from reportlab.lib.pagesizes    import A4
 from reportlab.lib              import colors
 from reportlab.platypus         import Table, TableStyle
 
+def generate_pdf():
+    pdf = canvas.Canvas(pdf_file_name, pagesize=A4)
+    doc_file_name = input("Digite o nome do arquivo que desja salvar: ")
+
+    # title
+    pdf.setTitle(doc_file_name)
+    pdf.setFontSize(18)
+    pdf.drawCentredString(300, 770, doc_file_archive_name)
+
+    # subtitle
+    pdf.setFontSize(12)
+    pdf.drawCentredString(300, 740, doc_file_subtitle)
+
+    # table
+    table_data = [["Nº", "Produto", "Quantidade"]]
+
+    for cont, product in enumerate(shopping_cart, start=1):
+        table_data.append([cont, product[0], product[1]])
+
+    main_table = Table(
+        table_data,
+        colWidths=[50, 300, 100]
+    )
+
+    main_table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.black),
+        ("GRID", (0, 0), (-1, -1), 1, colors.black),
+        ("ALIGN", (0, 0), (0, -1), "CENTER"),
+        ("ALIGN", (2, 0), (2, -1), "CENTER"),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+    ]))
+
+    table_width, table_height = main_table.wrapOn(pdf, 0, 0)
+    main_table.drawOn(pdf, 50, 700 - table_height)
+
+    print("Salvando o arquivo", end="")
+    for i in range(5):
+        sleep(.5)
+        print(".", end="")
+    
+    pdf.save()
+    print(f"\nPDF criado: {pdf_file_name}")
+
+
 # PDF CONFIG
 pdf_file_name = "lista_compras.pdf"
 complete_date = f"{datetime.datetime.now().day}/{datetime.datetime.now().month}/{datetime.datetime.now().year}"
@@ -96,48 +141,7 @@ while True:
                 print("\n")
 
         case "5": # download pdf
-            pdf = canvas.Canvas(pdf_file_name, pagesize=A4)
-            doc_file_name = input("Digite o nome do arquivo que desja salvar: ")
-
-            # title
-            pdf.setTitle(doc_file_name)
-            pdf.setFontSize(18)
-            pdf.drawCentredString(300, 770, doc_file_archive_name)
-
-            # subtitle
-            pdf.setFontSize(12)
-            pdf.drawCentredString(300, 740, doc_file_subtitle)
-
-            # table
-            table_data = [["Nº", "Produto", "Quantidade"]]
-
-            for cont, product in enumerate(shopping_cart, start=1):
-                table_data.append([cont, product[0], product[1]])
-
-            main_table = Table(
-                table_data,
-                colWidths=[50, 300, 100]
-            )
-
-            main_table.setStyle(TableStyle([
-                ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
-                ("TEXTCOLOR", (0, 0), (-1, 0), colors.black),
-                ("GRID", (0, 0), (-1, -1), 1, colors.black),
-                ("ALIGN", (0, 0), (0, -1), "CENTER"),
-                ("ALIGN", (2, 0), (2, -1), "CENTER"),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-            ]))
-
-            table_width, table_height = main_table.wrapOn(pdf, 0, 0)
-            main_table.drawOn(pdf, 50, 700 - table_height)
-
-            print("Salvando o arquivo", end="")
-            for i in range(5):
-                sleep(.5)
-                print(".", end="")
-            
-            pdf.save()
-            print(f"\nPDF criado: {pdf_file_name}")
+            generate_pdf()
 
         case "6": # sair
             print("Obrigado por usar os serviços do NOSSO MERCADO! ATÉ LOGO!")
